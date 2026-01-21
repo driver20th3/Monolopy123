@@ -1,6 +1,9 @@
 import type { Card, PropertyGroup, Tile } from "@/lib/types";
 
-export const MAX_TURNS = 20;
+// Fast mode: giới hạn lượt để phù hợp slot ~15 phút
+export const MAX_TURNS = 10;
+// Đua vòng: đạt số vòng này trước (hoặc hết lượt) sẽ chốt xếp hạng
+export const TARGET_LAPS = 3;
 export const STARTING_CASH = 1500;
 export const GO_SALARY = 200;
 export const CRISIS_BAIL = 200;

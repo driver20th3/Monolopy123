@@ -80,6 +80,8 @@ export function Board() {
   }, [state.players, coords, session.players]);
 
   useEffect(() => {
+    // Sync focus with the active player's position when turn changes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFocusIndex(state.players[state.currentPlayerIndex].position);
   }, [state.currentPlayerIndex, state.players]);
 

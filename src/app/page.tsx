@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, Gamepad2, HelpCircle, Swords } from "lucide-react";
+import { BookOpen, Gamepad2, HelpCircle, Presentation, Swords } from "lucide-react";
 import { PlayerSetup } from "@/components/PlayerSetup";
 
 const modes = [
@@ -9,6 +9,13 @@ const modes = [
     icon: <BookOpen className="h-6 w-6" />,
     href: "/theory",
     tone: "from-blue-500 to-sky-400",
+  },
+  {
+    title: "Thuyết trình",
+    desc: "Slide tương tác: CSHT ↔ KTTT, dẫn chứng, mini-game A/B, tổng kết.",
+    icon: <Presentation className="h-6 w-6" />,
+    href: "/presentation",
+    tone: "from-fuchsia-500 to-pink-400",
   },
   {
     title: "Trắc nghiệm",

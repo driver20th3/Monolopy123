@@ -9,6 +9,7 @@ const nav = [
   { href: "/", label: "Home" },
   { href: "/team", label: "Đăng ký nhóm" },
   { href: "/theory", label: "Lý thuyết" },
+  { href: "/presentation", label: "Thuyết trình" },
   { href: "/quiz", label: "Trắc nghiệm" },
   { href: "/scenario", label: "Tình huống" },
   { href: "/game", label: "Marx-opoly" },
@@ -40,13 +41,14 @@ function withAlpha(color: string, alphaHex: string) {
 
 export function TopBar() {
   const pathname = usePathname();
-  if (pathname?.startsWith("/game")) return null;
   const { state, setActivePlayer } = useSession();
 
   const active = useMemo(
     () => state.players.find((p) => p.id === state.activePlayerId) ?? state.players[0],
     [state.players, state.activePlayerId]
   );
+
+  if (pathname?.startsWith("/game")) return null;
 
   return (
     <div className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/60 backdrop-blur">

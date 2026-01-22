@@ -3,7 +3,6 @@
 import React, {
   createContext,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -76,37 +75,41 @@ function defaultPlayers(count: number = 4): SessionPlayer[] {
 
 const Ctx = createContext<SessionApi | null>(null);
 
-export function SessionProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<SessionState>(() => ({
-    playerCount: 4,
-    players: defaultPlayers(4),
-    activePlayerId: 0,
-  }));
+function loadFromStorage(): SessionState | null {
+  try {
+    if (typeof window === "undefined") return null;
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<SessionState>;
+    if (!parsed.players || typeof parsed.activePlayerId !== "number") return null;
+    const count =
+      typeof parsed.playerCount === "number"
+        ? Math.min(6, Math.max(1, parsed.playerCount))
+        : parsed.players.length;
+    if (parsed.players.length < 1 || parsed.players.length > 6) return null;
+    return {
+      playerCount: count,
+      players: parsed.players.map((p, i) => buildPlayer(i, p)),
+      activePlayerId: Math.min(count - 1, Math.max(0, parsed.activePlayerId)),
+    };
+  } catch {
+    return null;
+  }
+}
 
-  // Load from localStorage
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const parsed = JSON.parse(raw) as Partial<SessionState>;
-      if (!parsed.players || typeof parsed.activePlayerId !== "number") return;
-      const count =
-        typeof parsed.playerCount === "number"
-          ? Math.min(6, Math.max(1, parsed.playerCount))
-          : parsed.players.length;
-      if (parsed.players.length < 1 || parsed.players.length > 6) return;
-      setState({
-        playerCount: count,
-        players: parsed.players.map((p, i) => buildPlayer(i, p)),
-        activePlayerId: Math.min(count - 1, Math.max(0, parsed.activePlayerId)),
-      });
-    } catch {
-      // ignore
-    }
-  }, []);
+export function SessionProvider({ children }: { children: React.ReactNode }) {
+  const [state, setState] = useState<SessionState>(() => {
+    return (
+      loadFromStorage() ?? {
+        playerCount: 4,
+        players: defaultPlayers(4),
+        activePlayerId: 0,
+      }
+    );
+  });
 
   // Persist to localStorage
-  useEffect(() => {
+  React.useEffect(() => {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {

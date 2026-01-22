@@ -2,7 +2,6 @@
   "buildCommand": "cd Monopoly && npm install && npm run build",
   "outputDirectory": "Monopoly/.next",
   "installCommand": "cd Monopoly && npm install",
-  "framework": "nextjs",
-  "rootDirectory": "Monopoly"
+  "framework": "nextjs"
 }
 

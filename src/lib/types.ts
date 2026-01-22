@@ -1,6 +1,12 @@
 export type Tier = "low" | "mid" | "high";
 
-export type PlayerId = "HUMAN" | "BOT_1" | "BOT_2" | "BOT_3";
+export type PlayerId =
+  | "PLAYER_0"
+  | "PLAYER_1"
+  | "PLAYER_2"
+  | "PLAYER_3"
+  | "PLAYER_4"
+  | "PLAYER_5";
 
 export type PropertyGroup = {
   id: number;
@@ -61,6 +67,9 @@ export type Player = {
   position: number;
   cash: number;
   skipTurns: number; // for crisis / bureaucracy etc.
+  correct: number; // số câu trả lời đúng (để thuyết trình)
+  wrong: number; // số câu trả lời sai
+  laps: number; // số vòng đã hoàn thành (qua GO)
 };
 
 export type DeckType = "infrastructure" | "superstructure";
@@ -83,4 +92,3 @@ export type LogEntry = {
   turn: number;
   text: string;
 };
-

@@ -9,18 +9,28 @@ export const GO_SALARY = 200;
 export const CRISIS_BAIL = 200;
 
 export const propertyGroups: PropertyGroup[] = [
-  { id: 1, name: "Nhu cầu cơ bản (Thực phẩm)", colorClass: "bg-amber-700", tier: "low" },
+  {
+    id: 1,
+    name: "Nhu cầu cơ bản (Thực phẩm)",
+    colorClass: "bg-gradient-to-r from-amber-500 to-orange-600",
+    tier: "low",
+  },
   {
     id: 2,
     name: "Nhu cầu cơ bản (Chỗ ở)",
-    colorClass: "bg-orange-500",
+    colorClass: "bg-gradient-to-r from-orange-500 to-red-500",
     tier: "low",
   },
-  { id: 3, name: "Công nghiệp", colorClass: "bg-red-600", tier: "mid" },
+  {
+    id: 3,
+    name: "Công nghiệp",
+    colorClass: "bg-gradient-to-r from-red-500 to-rose-600",
+    tier: "mid",
+  },
   {
     id: 4,
     name: "Thượng tầng (Khoa học/Nghệ thuật)",
-    colorClass: "bg-blue-600",
+    colorClass: "bg-gradient-to-r from-blue-500 to-indigo-600",
     tier: "high",
   },
 ];

@@ -14,6 +14,7 @@ import type {
   OwnedProperty,
   Player,
   PlayerId,
+  PlayerToken,
   Tile,
 } from "@/lib/types";
 import { isProperty } from "@/lib/rules";
@@ -177,15 +178,11 @@ function handleLanding(state: GameState, tile: Tile): GameState {
     next = updatePlayer(next, current.id, (p) => ({
       ...p,
       position: 10,
-      skipTurns: Math.max(p.skipTurns, 1),
     }));
     return next;
   }
   if (tile.type === "ECONOMIC_CRISIS") {
-    return addLog(
-      next,
-      `${current.name} đang ở ô Khủng hoảng (bỏ lượt nếu còn skip).`,
-    );
+    return addLog(next, `${current.name} đang ở ô Khủng hoảng.`);
   }
   if (tile.type === "SOCIAL_WELFARE") {
     return addLog(next, `${current.name} nghỉ tại ô Phúc lợi xã hội.`);
@@ -295,20 +292,12 @@ function reducer(state: GameState, action: Action): GameState {
           message: "Bạn đã gieo trong lượt này. Hãy kết thúc lượt.",
         };
 
-      // If skipping (crisis/bureaucracy), block roll.
-      if (current.skipTurns > 0) {
-        return {
-          ...state,
-          message: "Bạn phải trả bảo lãnh hoặc kết thúc lượt (bỏ lượt).",
-        };
-      }
-
       // Must answer question before rolling (Marx-opoly học trước chơi sau)
       if (!state.diceAllowance) {
         const drawn = state.questionForTurn
           ? { nextState: state, question: state.questionForTurn }
           : drawQuestion(state);
-        const next = {
+        const next: GameState = {
           ...drawn.nextState,
           questionForTurn: drawn.question,
           activeModal: { kind: "question", question: drawn.question },
@@ -380,17 +369,6 @@ function reducer(state: GameState, action: Action): GameState {
     }
     case "END_TURN": {
       let next = state;
-
-      // Handle skip-turn consumption for current player
-      const current = next.players[next.currentPlayerIndex];
-      if (current.skipTurns > 0) {
-        next = updatePlayer(next, current.id, (p) => ({
-          ...p,
-          skipTurns: Math.max(0, p.skipTurns - 1),
-        }));
-        next = addLog(next, `${current.name} bỏ 1 lượt.`);
-      }
-
       const nextIndex = (next.currentPlayerIndex + 1) % next.players.length;
       const wraps = nextIndex === 0;
       next = {
